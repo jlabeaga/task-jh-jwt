@@ -39,7 +39,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:postgresql://localhost:5432/task
     username: task
-    password:
+    password: task
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -48,7 +48,8 @@ spring:
     show-sql: true
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
-    contexts: dev, faker
+    #contexts: dev, faker
+    contexts: dev
   mail:
     host: localhost
     port: 25
@@ -87,7 +88,9 @@ jhipster:
         # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
         base64-secret: YWRlOWVkMWRmNzczZTczOWY1Mjg4MzZmMjY5NzMxMzk2OWVhNzZjMWMyYjg3MTYyN2Q0ZDZkZWVkYmNkZTEzOGE3ZTM2YTYwODllODE5NGRmMjAwN2ViYWM5Zjk0MjQ0MWU1OGY3Y2Y3NmYzNDMzNzg2ZTdiZDIyMTljNWFhMTk=
         # Token is valid 24 hours
-        token-validity-in-seconds: 86400
+        #token-validity-in-seconds: 86400
+        # Token is valid 365 days
+        token-validity-in-seconds: 31536000
         token-validity-in-seconds-for-remember-me: 2592000
   mail: # specific JHipster mail property, for standard properties see MailProperties
     base-url: http://127.0.0.1:8080
