@@ -1,0 +1,48 @@
+enum TaskStatus {
+    NEW, OPEN, BLOCKED, CLOSED
+}
+enum TaskResult {
+    NOT_STARTED, WORKING, SOLVED, WORKAROUND, CANCELED
+}
+entity Task {
+    name String required
+    description String
+    dateCreated LocalDate required
+    dueDate LocalDate
+    status TaskStatus required
+    result TaskResult required
+    estimatedHours Float
+}
+entity Tasklist {
+    name String required
+    description String
+}
+entity Action {
+    name String required
+    description String
+    dateCreated LocalDate
+    hours Float
+}
+entity Resource {
+    name String required
+    description String
+    ref String
+    isGlobal Boolean
+}
+relationship ManyToOne {
+    Task{owner} to User
+    Action{owner} to User
+// Task{tasklist} to Tasklist   // already in OneToMany
+// Action{task} to Task    // already in OneToMany
+}
+relationship OneToMany {
+    Tasklist{tasks} to Task{tasklist}
+    Task{actions} to Action{task}
+}
+relationship ManyToMany {
+    Tasklist{participants} to User{tasklists}
+    Task{resources} to Resource{tasks}
+}
+//dto * with mapstruct
+service * with serviceImpl
+//search * with elasticsearch
