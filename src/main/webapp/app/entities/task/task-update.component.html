@@ -1,0 +1,132 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-task-heading">Create or edit a Task</h2>
+
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_name">Name</label>
+                    <input type="text" class="form-control" name="name" id="field_name"
+                           formControlName="name"/>
+                    <div *ngIf="editForm.get('name')!.invalid && (editForm.get('name')!.dirty || editForm.get('name')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('name')?.errors?.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_description">Description</label>
+                    <input type="text" class="form-control" name="description" id="field_description"
+                           formControlName="description"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_dateCreated">Date Created</label>
+                    <div class="input-group">
+                        <input id="field_dateCreated" type="text" class="form-control" name="dateCreated" ngbDatepicker #dateCreatedDp="ngbDatepicker" formControlName="dateCreated"/>
+                        <span class="input-group-append">
+                            <button type="button" class="btn btn-secondary" (click)="dateCreatedDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+                        </span>
+                    </div>
+                    <div *ngIf="editForm.get('dateCreated')!.invalid && (editForm.get('dateCreated')!.dirty || editForm.get('dateCreated')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('dateCreated')?.errors?.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_dueDate">Due Date</label>
+                    <div class="input-group">
+                        <input id="field_dueDate" type="text" class="form-control" name="dueDate" ngbDatepicker #dueDateDp="ngbDatepicker" formControlName="dueDate"/>
+                        <span class="input-group-append">
+                            <button type="button" class="btn btn-secondary" (click)="dueDateDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_status">Status</label>
+                    <select class="form-control" name="status" formControlName="status" id="field_status">
+                        <option value="NEW">NEW</option>
+                        <option value="OPEN">OPEN</option>
+                        <option value="BLOCKED">BLOCKED</option>
+                        <option value="CLOSED">CLOSED</option>
+                    </select>
+                    <div *ngIf="editForm.get('status')!.invalid && (editForm.get('status')!.dirty || editForm.get('status')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('status')?.errors?.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_result">Result</label>
+                    <select class="form-control" name="result" formControlName="result" id="field_result">
+                        <option value="NOT_STARTED">NOT_STARTED</option>
+                        <option value="WORKING">WORKING</option>
+                        <option value="SOLVED">SOLVED</option>
+                        <option value="WORKAROUND">WORKAROUND</option>
+                        <option value="CANCELED">CANCELED</option>
+                    </select>
+                    <div *ngIf="editForm.get('result')!.invalid && (editForm.get('result')!.dirty || editForm.get('result')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('result')?.errors?.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_estimatedHours">Estimated Hours</label>
+                    <input type="number" class="form-control" name="estimatedHours" id="field_estimatedHours"
+                           formControlName="estimatedHours"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_owner">Owner</label>
+                    <select class="form-control" id="field_owner" name="owner" formControlName="owner">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="userOption.id === editForm.get('owner')!.value?.id ? editForm.get('owner')!.value : userOption" *ngFor="let userOption of users; trackBy: trackById">{{ userOption.id }}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="field_resources">Resources</label>
+                    <select class="form-control" id="field_resources" multiple name="resources" formControlName="resources">
+                        <option [ngValue]="getSelected(editForm.get('resources')!.value, resourceOption)" *ngFor="let resourceOption of resources; trackBy: trackById">{{ resourceOption.id }}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_tasklist">Tasklist</label>
+                    <select class="form-control" id="field_tasklist" name="tasklist" formControlName="tasklist">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="tasklistOption.id === editForm.get('tasklist')!.value?.id ? editForm.get('tasklist')!.value : tasklistOption" *ngFor="let tasklistOption of tasklists; trackBy: trackById">{{ tasklistOption.id }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                    <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+                </button>
+
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
